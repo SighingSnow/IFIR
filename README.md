@@ -5,16 +5,16 @@
 ### Table of Contents
 - [Updates](#updates)
 - [Overview](#overview)
+- [Mteb](#mteb)
 - [Preparation](#preparation)
 - [Experiments](#experiments)
 - [Citation](#citation)
 
-<a name="Plan"></a>
-## :rocket: Plan
-We will release the code and results on MTEB benchmark in the next 3 months.
+
 
 <a name="updates"></a>
 ## :fire: Updates
+- [06/2025] :tada: We are delighted that IFIR has been integrated into the [MTEB benchmark](https://mteb.org/benchmarks/ifir) and is now available for evaluation.
 - [03/2025] Paper **IFIR: A Comprehensive Benchmark for Evaluating Instruction-Following in Expert-Domain Information Retrieval** is released. 
 - [03/2025] Datasets for IFIR are available on HuggingFace. [![HuggingFace](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Datasets-blue)](https://huggingface.co/datasets/songtingyu/IFIR/)
 
@@ -26,6 +26,38 @@ We will release the code and results on MTEB benchmark in the next 3 months.
   <img src="./assets/motivation.png" width="50%">
 </center>
 
+<a name="mteb"></a>
+## :rocket: MTEB
+
+IFIR has been integrated into the [MTEB benchmark](https://mteb.org/benchmarks/ifir) and is now available for evaluation. You can use the following code to evaluate your model on IFIR:
+
+```python
+import mteb
+from sentence_transformers import SentenceTransformer
+import torch
+
+# Define the sentence-transformers model name
+def main(args):
+    model_name = args.model_name
+    model = SentenceTransformer(
+         model_name,
+         model_kwargs={'torch_dtype': torch.float16},
+         device=args.device,
+         trust_remote_code=True
+    )
+    tasks = mteb.get_tasks(tasks=["IFIRFiQA", "IFIRFire", "IFIRAila",  "IFIRNFCorpus", "IFIRCds", "IFIRPm", "IFIRScifact"])
+    evaluation = mteb.MTEB(tasks=tasks)
+    model_name = args.model_name.split("/")[-1]
+    results = evaluation.run(model, output_folder=f"results/{model_name}", encode_kwargs={"batch_size":2}, co2_tracker=False)
+
+if __name__ == "__main__":
+    from argparse import ArgumentParser
+    parser = ArgumentParser(description="Run MTEB evaluation with a specified model.")
+    parser.add_argument("--model_name", type=str, help="Name of the sentence-transformers model to evaluate.")
+    parser.add_argument("--device", type=str, help="device")
+    args = parser.parse_args()
+    main(args)
+```
 
 <a name="preparation"></a>
 ## :hammer: Preparation
