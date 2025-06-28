@@ -29,7 +29,7 @@
 <a name="mteb"></a>
 ## :rocket: MTEB
 
-IFIR has been integrated into the [MTEB benchmark](https://mteb.org/benchmarks/ifir) and is now available for evaluation. You can use the following code to evaluate your model on IFIR:
+IFIR has been integrated into the [MTEB benchmark](https://mteb.org/benchmarks/ifir) v2.0.0 branch and is now available for evaluation. You can use the following code to evaluate your model on IFIR:
 
 ```python
 import mteb
